@@ -3,6 +3,7 @@ import type { User, Video, Bookmark } from './types';
 import { MOCK_VIDEOS } from './services/mockData';
 import { Navbar } from './components/Navbar';
 import { LoginModal } from './components/LoginModal';
+import { LoginSignup } from './components/LoginSignup';
 import { CourseGrid } from './components/CourseGrid';
 import { BookmarkPanel } from './components/BookmarkPanel';
 import { VideoPlayer } from './components/VideoPlayer';
@@ -10,6 +11,7 @@ import { ProtectionOverlay } from './components/ProtectionOverlay';
 import {
   getAuthUser,
   setAuthUser,
+  logoutUser,
   getBookmarks,
   addBookmark,
   deleteBookmark,
@@ -56,6 +58,17 @@ export default function App() {
     setAuthUser(updatedUser);
     setUser(updatedUser);
     setShowProfileModal(false);
+  };
+
+  const handleLogin = (loggedInUser: User) => {
+    setAuthUser(loggedInUser);
+    setUser(loggedInUser);
+  };
+
+  const handleLogout = () => {
+    logoutUser();
+    setUser({ username: '', email: '', isLoggedIn: false });
+    setSelectedVideo(null);
   };
 
   const handleSelectVideo = (video: Video) => {
@@ -135,13 +148,17 @@ export default function App() {
 
   return (
     <ProtectionOverlay>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Navbar
-          user={user}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          onProfileClick={() => setShowProfileModal(true)}
-        />
+      {!user.isLoggedIn ? (
+        <LoginSignup onLogin={handleLogin} />
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Navbar
+            user={user}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onProfileClick={() => setShowProfileModal(true)}
+            onLogout={handleLogout}
+          />
 
         <main className="dashboard-container" style={{ flexGrow: 1 }}>
           {selectedVideo ? (
@@ -332,7 +349,8 @@ export default function App() {
             onClose={() => setShowProfileModal(false)}
           />
         )}
-      </div>
+        </div>
+      )}
     </ProtectionOverlay>
   );
 }

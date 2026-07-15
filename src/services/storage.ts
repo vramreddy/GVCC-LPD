@@ -16,7 +16,7 @@ export function getAuthUser(): User {
       // fallback
     }
   }
-  return { username: 'Guest Student', email: 'student@gvcc.edu', isLoggedIn: true };
+  return { username: '', email: '', isLoggedIn: false };
 }
 
 export function setAuthUser(user: User): void {

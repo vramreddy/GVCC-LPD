@@ -6,13 +6,15 @@ interface NavbarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onProfileClick: () => void;
+  onLogout: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   user,
   searchQuery,
   setSearchQuery,
-  onProfileClick
+  onProfileClick,
+  onLogout
 }) => {
   return (
     <nav className="navbar screenshot-protected">
@@ -52,6 +54,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             {user.username || 'Student'}
           </span>
         </div>
+        <button
+          className="form-btn cancel"
+          onClick={onLogout}
+          style={{ padding: '0.4rem 0.85rem', fontSize: '0.85rem', border: '1px solid var(--border-muted)', borderRadius: '50px', whiteSpace: 'nowrap' }}
+        >
+          Sign Out
+        </button>
       </div>
     </nav>
   );
